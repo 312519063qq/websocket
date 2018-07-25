@@ -1,6 +1,7 @@
 package com.ldlood.Handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ldlood.MyWebSocketUtils;
 import com.ldlood.VO.MessageVO;
 import com.ldlood.WebSocketUtils;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        MyWebSocketUtils.onlinePerson(session,message.getPayload());
         System.out.println("--------------------------handleTextMessage------------------------------" + message.getPayload());
         String[] flag = message.getPayload().split(",");
         if(flag[0].equals("QRCode")){
@@ -60,6 +62,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         System.out.println("---------------------------afterConnectionClosed-----------------------------");
+        MyWebSocketUtils.offlinePerson(session);
         super.afterConnectionClosed(session, status);
     }
 

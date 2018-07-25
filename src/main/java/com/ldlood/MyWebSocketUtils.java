@@ -35,8 +35,8 @@ public class MyWebSocketUtils {
      * 链接退出
      * @param session
      */
-    public static void offlinePerson(Session session) {
-//        revertMap.remove(MapUtils.getString(map, session));
+    public static void offlinePerson(WebSocketSession session) {
+        revertMap.remove(map.get(session));
         map.remove(session);
     }
     /**
