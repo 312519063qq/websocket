@@ -2,8 +2,9 @@ package com.ldlood.Handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ldlood.MyWebSocketUtils;
+import com.ldlood.Service.UserService;
 import com.ldlood.VO.MessageVO;
-import com.ldlood.WebSocketUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -12,6 +13,10 @@ import java.io.IOException;
 
 @Component
 public class MyWebSocketHandler extends TextWebSocketHandler {
+
+    @Autowired
+    private UserService userService;
+
 
     private MessageVO messageVO = new MessageVO();
 
@@ -29,6 +34,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        int  aa = userService.getInt();
+        System.out.println("userService.getInt() ----------------方法调用==="+aa);
         MyWebSocketUtils.onlinePerson(session,message.getPayload());
         System.out.println("--------------------------handleTextMessage------------------------------" + message.getPayload());
         String[] flag = message.getPayload().split(",");

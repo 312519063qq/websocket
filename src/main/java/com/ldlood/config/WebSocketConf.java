@@ -12,7 +12,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 public class WebSocketConf implements WebSocketConfigurer{
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
-        webSocketHandlerRegistry.addHandler(new MyWebSocketHandler(),"/webSocket").setAllowedOrigins("*");
+        webSocketHandlerRegistry.addHandler(webSocketHandler(),"/webSocket").setAllowedOrigins("*");
     }
 
     @Bean
