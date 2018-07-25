@@ -72,7 +72,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         return super.supportsPartialMessages();
     }
 
-    private void sendmessage(WebSocketSession socketSession, String message) {
+    public static void sendmessage(WebSocketSession socketSession, String message) {
         try {
             socketSession.sendMessage(new TextMessage(message));
         } catch (IOException e) {

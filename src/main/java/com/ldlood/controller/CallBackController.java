@@ -1,22 +1,19 @@
 package com.ldlood.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ldlood.Service.WebSocket;
-import com.ldlood.Service.WebSocketServer;
+import com.ldlood.Handler.MyWebSocketHandler;
+import com.ldlood.MyWebSocketUtils;
 import com.ldlood.VO.MessageVO;
-import com.ldlood.WebSocketUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.websocket.Session;
-import java.io.IOException;
+import org.springframework.web.socket.WebSocketSession;
 
 @Controller
 public class CallBackController {
     @RequestMapping("/callBack")
     public String callBack(String sessionKey){
         try {
-            Session session = WebSocketUtils.getSession(sessionKey);
+            WebSocketSession session = MyWebSocketUtils.getSession(sessionKey);
             MessageVO messageVO = new MessageVO();
             System.out.println("生成二维码");
             messageVO.setType(3);
@@ -28,8 +25,7 @@ public class CallBackController {
                 Json = mapper.writeValueAsString(messageVO);
             } catch (Exception ex) {
             }
-            WebSocketServer.sendMessage(session,Json);
-
+            MyWebSocketHandler.sendmessage(session,Json);
         } catch (Exception e) {
             e.printStackTrace();
         }
