@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ldlood.Handler.MyWebSocketHandler;
 import com.ldlood.MyWebSocketUtils;
 import com.ldlood.VO.MessageVO;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.WebSocketSession;
 
-@Controller
+@RestController
 public class CallBackController {
     @RequestMapping("/callBack")
     public String callBack(String sessionKey){
