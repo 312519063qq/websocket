@@ -10,8 +10,8 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-@Component
-@ServerEndpoint("/webSocket")
+//@Component
+//@ServerEndpoint("/webSocket")
 @Slf4j
 public class WebSocketServer {
     private MessageVO messageVO = new MessageVO();
