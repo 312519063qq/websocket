@@ -2,9 +2,7 @@ package com.ldlood;
 
 
 
-import com.ldlood.Service.WebSocket;
-
-import javax.websocket.Session;
+import com.ldlood.service.WebSocket;
 
 public class Test {
 

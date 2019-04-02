@@ -1,4 +1,4 @@
-package com.ldlood.Service;
+package com.ldlood.service;
 
 public interface UserService {
     int getInt();

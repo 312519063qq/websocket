@@ -1,17 +1,6 @@
-package com.ldlood.Service;
+package com.ldlood.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ldlood.VO.MessageVO;
-import com.ldlood.WebSocketUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Created by Administrator on 2017/8/19.

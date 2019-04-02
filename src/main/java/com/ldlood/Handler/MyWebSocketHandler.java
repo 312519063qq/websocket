@@ -2,20 +2,26 @@ package com.ldlood.Handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ldlood.MyWebSocketUtils;
-import com.ldlood.Service.UserService;
+import com.ldlood.service.MessageService;
+import com.ldlood.service.UserService;
+import com.ldlood.service.WebSocketService;
 import com.ldlood.VO.MessageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.io.IOException;
-
 @Component
 public class MyWebSocketHandler extends TextWebSocketHandler {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private WebSocketService webSocketService;
+
+    @Autowired
+    private MessageService messageService;
 
 
     private MessageVO messageVO = new MessageVO();
@@ -51,7 +57,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        this.sendmessage(session,Json);
+//        messageService.sendSession(session);
+        webSocketService.sendMessage(session,Json);
     }
 
     @Override
@@ -79,11 +86,11 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         return super.supportsPartialMessages();
     }
 
-    public static void sendmessage(WebSocketSession socketSession, String message) {
-        try {
-            socketSession.sendMessage(new TextMessage(message));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void sendmessage(WebSocketSession socketSession, String message) {
+//        try {
+//            socketSession.sendMessage(new TextMessage(message));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

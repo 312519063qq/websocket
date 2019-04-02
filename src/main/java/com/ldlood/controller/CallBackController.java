@@ -1,9 +1,10 @@
 package com.ldlood.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ldlood.Handler.MyWebSocketHandler;
 import com.ldlood.MyWebSocketUtils;
-import com.ldlood.Service.UserService;
+import com.ldlood.service.MessageService;
+import com.ldlood.service.UserService;
+import com.ldlood.service.WebSocketService;
 import com.ldlood.VO.MessageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,12 @@ public class CallBackController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private WebSocketService webSocketService;
+
+    @Autowired
+    private MessageService messageService;
 
     @RequestMapping("/callBack")
     public String callBack(String sessionKey){
@@ -33,10 +40,17 @@ public class CallBackController {
                 Json = mapper.writeValueAsString(messageVO);
             } catch (Exception ex) {
             }
-            MyWebSocketHandler.sendmessage(session,Json);
+            webSocketService.sendMessage(session,Json);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return "success";
+    }
+
+
+    @RequestMapping("/sendMsg")
+    public String sendMsg(){
+        messageService.sendMsg();
         return "success";
     }
 }
