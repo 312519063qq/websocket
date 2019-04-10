@@ -44,7 +44,7 @@ public class CallBackController {
             String key = redisTemplate.opsForValue().get(orderId);
             WebSocketSession session = MyWebSocketUtils.getSession(key);
             if(session==null){
-                template.convertAndSend(RabbitConf.EXCHANGE,key);
+                template.convertAndSend(RabbitConf.EXCHANGE,RabbitConf.QUEUE_NAME,key);
                 return "success";
             }
             MessageVO vo = new MessageVO();

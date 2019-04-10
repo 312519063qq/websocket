@@ -1,6 +1,8 @@
 package com.ldlood.listener;
 
+import com.alibaba.fastjson.JSON;
 import com.ldlood.MyWebSocketUtils;
+import com.ldlood.VO.MessageVO;
 import com.ldlood.config.RabbitConf;
 import com.ldlood.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +24,9 @@ public class MessageListener {
         log.info("msg:{}",msg);
         WebSocketSession session = MyWebSocketUtils.getSession(msg);
         if(session!=null){
-            webSocketService.sendMessage(session,"支付成功");
+            MessageVO vo = new MessageVO();
+            vo.setMessage("支付成功");
+            webSocketService.sendMessage(session, JSON.toJSONString(vo));
         }
     }
 }
