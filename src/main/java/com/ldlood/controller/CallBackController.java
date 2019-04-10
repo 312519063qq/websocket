@@ -1,16 +1,25 @@
 package com.ldlood.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ldlood.MyWebSocketUtils;
+import com.ldlood.config.RabbitConf;
 import com.ldlood.service.MessageService;
 import com.ldlood.service.UserService;
 import com.ldlood.service.WebSocketService;
 import com.ldlood.VO.MessageVO;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.WebSocketSession;
 
+import javax.websocket.Session;
+
+@Slf4j
 @RestController
 public class CallBackController {
 
@@ -23,24 +32,24 @@ public class CallBackController {
     @Autowired
     private MessageService messageService;
 
-    @RequestMapping("/callBack")
-    public String callBack(String sessionKey){
-        try {
-            int  aa = userService.getInt();
-            System.out.println("userService.getInt() ----------------方法调用==="+aa);
-            WebSocketSession session = MyWebSocketUtils.getSession(sessionKey);
-            MessageVO messageVO = new MessageVO();
-            System.out.println("生成二维码");
-            messageVO.setType(3);
-            messageVO.setMessage("支付成功");
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
 
-            ObjectMapper mapper = new ObjectMapper();
-            String Json = "";
-            try {
-                Json = mapper.writeValueAsString(messageVO);
-            } catch (Exception ex) {
+    @Autowired
+    private RabbitTemplate template;
+
+    @RequestMapping("/callBack")
+    public String callBack(String orderId){
+        try {
+            String key = redisTemplate.opsForValue().get(orderId);
+            WebSocketSession session = MyWebSocketUtils.getSession(key);
+            if(session==null){
+                template.convertAndSend(RabbitConf.EXCHANGE,key);
+                return "success";
             }
-            webSocketService.sendMessage(session,Json);
+            MessageVO vo = new MessageVO();
+            vo.setMessage("支付成功");
+            webSocketService.sendMessage(session, JSON.toJSONString(vo));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,4 +62,5 @@ public class CallBackController {
         messageService.sendMsg();
         return "success";
     }
+
 }

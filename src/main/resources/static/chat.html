@@ -94,7 +94,7 @@
     websocket.onmessage = function (event) {
         console.log('websocket收到消息' + event.data);
         var result = $.parseJSON(event.data);
-        if (result.type == 3) {
+        if (true) {
             var element = document.getElementById('message-template').innerHTML;
             $('.message-container').append(element);
             $(".message-content:last").html(result.message);
@@ -116,7 +116,10 @@
 
     $('.send-message').click(function () {
 //        var message = $('.chat-message').val();
-        var message ="QRCode,"+Math.random();
+        var message ='[{\n' +
+            '\t"type":"CreateQRcode",\n' +
+            '\t  "message":"111"\n' +
+            '}]';
         sendmessage(message);
     })
 

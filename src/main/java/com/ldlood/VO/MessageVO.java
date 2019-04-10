@@ -14,7 +14,7 @@ public class MessageVO {
     private Integer userNum;
 
 
-    private Integer type;
+    private String type;
 
 
     private String message;
