@@ -38,15 +38,24 @@ public class CallBackController {
     @Autowired
     private RabbitTemplate template;
 
+    /**
+     * 支付网关回调
+     * @param orderId
+     * @return
+     */
     @RequestMapping("/callBack")
     public String callBack(String orderId){
         try {
+            //从redis里拿出 orderId 对应的 session的uuid
             String key = redisTemplate.opsForValue().get(orderId);
+            //通过uuid取出用户 会话session
             WebSocketSession session = MyWebSocketUtils.getSession(key);
             if(session==null){
+                //如果这个机器上拿不到session 说明用户会话的不是这台  发送通知  通知到所有的机器 让别的机器去给客户端发消息
                 template.convertAndSend(RabbitConf.EXCHANGE,RabbitConf.QUEUE_NAME,key);
                 return "success";
             }
+            //发送消息给客户端
             MessageVO vo = new MessageVO();
             vo.setMessage("支付成功");
             webSocketService.sendMessage(session, JSON.toJSONString(vo));

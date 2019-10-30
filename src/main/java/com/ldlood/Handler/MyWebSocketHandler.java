@@ -1,15 +1,14 @@
 package com.ldlood.Handler;
 
 import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alibaba.fastjson.JSONObject;
 import com.ldlood.MyWebSocketUtils;
 import com.ldlood.VO.MessageType;
+import com.ldlood.VO.MessageVO;
 import com.ldlood.service.MessageService;
 import com.ldlood.service.UserService;
 import com.ldlood.service.WebSocketService;
-import com.ldlood.VO.MessageVO;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -53,16 +52,19 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         //TODO 把session和二维码对应的uuid 存在本地   把orderId和uuid存储在redis里 发送给前端生成二维码
-        List<MessageVO> messageVOS = com.alibaba.fastjson.JSONObject.parseArray(message.getPayload(), MessageVO.class);
+        List<MessageVO> messageVOS = JSONObject.parseArray(message.getPayload(), MessageVO.class);
         MessageVO messageVO = messageVOS.get(0);
         if(messageVO.getType().equals(MessageType.CreateQRcode.name())){
             log.info("生成订单 产生二维码");
             String s = UUID.randomUUID().toString();
+            //存储用户session会话
             MyWebSocketUtils.onlinePerson(session,s );
+            //存储orderId对应session的 uuid
             String orderId="123";
             redisTemplate.opsForValue().set(orderId,s);
         }
-        messageVO.setMessage("www.baidu.com");
+        //二维码url
+        messageVO.setMessage("QRcode   url:www.baidu.com");
         webSocketService.sendMessage(session,JSON.toJSONString(messageVO));
     }
 
@@ -91,11 +93,4 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         return super.supportsPartialMessages();
     }
 
-//    public static void sendmessage(WebSocketSession socketSession, String message) {
-//        try {
-//            socketSession.sendMessage(new TextMessage(message));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 }

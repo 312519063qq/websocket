@@ -8,17 +8,18 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MyWebSocketUtils {
     /**
      * 存放session的集合
      * 对应uuid
      */
-    public static Map<WebSocketSession, String> map = new HashMap<WebSocketSession, String>();
+    public static Map<WebSocketSession, String> map = new ConcurrentHashMap<>();
     /**
      * map的反转集合，为了方便，多存储一个集合，MapUtils内有反转方法，可自行了解
      */
-    public static Map<String, WebSocketSession> revertMap = new HashMap<String, WebSocketSession>();
+    public static Map<String, WebSocketSession> revertMap = new ConcurrentHashMap<String, WebSocketSession>();
 
     /**
      * 加入新链接
